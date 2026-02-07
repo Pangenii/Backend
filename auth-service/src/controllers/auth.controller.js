@@ -1,6 +1,6 @@
 import logger from "../utils/logger";
-import User from "../models/User.model";
-import { validateRegisterInput } from "../utils/validation";
+import User from "../models/User.model.js";
+import { validateRegisterInput } from "../utils/validation.js";
 
 //USER REGISTRATION
 export const register = async (req, res) => {
