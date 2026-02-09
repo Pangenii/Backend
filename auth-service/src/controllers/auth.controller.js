@@ -1,6 +1,7 @@
 import logger from "../utils/logger";
 import User from "../models/User.model.js";
 import { validateRegisterInput } from "../utils/validation.js";
+import { generateToken } from "../utils/generateToken.js";
 
 //USER REGISTRATION
 export const register = async (req, res) => {
@@ -19,7 +20,7 @@ export const register = async (req, res) => {
         let user = await User.findOne({ $or: [{ email }, { username }] });
         if (user) {
             logger.warn("User with this credentials is already registered.")
-            return res.status().json({
+            return res.status(409).json({
                 success: false,
                 message: "User with this credentials is already registered."
             })
@@ -27,7 +28,16 @@ export const register = async (req, res) => {
         user = new User({ username, email, password });
         await user.save();
         logger.info("User registered successfully.")
+
+        const { accessToken, refreshToken } = await generateToken(user);
+        res.status(201).json({
+            success: true,
+            message: "User registered successfully.",
+            accessToken,
+            refreshToken
+        })
     } catch (error) {
+        logger.error("Registration error", error);
         res.status(500).json({
             success: false,
             message: "Internal Server Error"

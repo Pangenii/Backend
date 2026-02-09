@@ -20,6 +20,6 @@ const refreshTokenSchema = new mongoose.Schema({
 //TTL(TIME-TO-LIVE) INDEX
 refreshTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-const refreshToken = mongoose.model("RefreshToken", refreshTokenSchema);
+const RefreshToken = mongoose.model("RefreshToken", refreshTokenSchema);
 
-export default refreshToken;
+export default RefreshToken;
